@@ -1,0 +1,29 @@
+kibana:
+  #image: webdizz/kibana
+  build: ./
+  ports:
+    - 22
+    - 8087:80
+  environment:
+    - ROOT_PASS=123456
+  volumes:
+    - configs/nginx.conf:/usr/local/nginx/conf/nginx.conf
+    - configs/kibana.conf:/usr/local/nginx/conf/sites-enabled/kibana.conf
+    - configs/config.js:/usr/share/kibana/config.js
+  links: 
+    - elasticsearch:elasticsearch
+  hostname: kibana
+
+elasticsearch:
+  image: webdizz/elasticsearch
+  hostname: elasticsearch
+  ports: 
+    - 9200
+  links: 
+    - redis 
+
+redis:
+  image: dockerfile/redis
+  expose:
+    - 6379
+  hostname: redis
